@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "target": "ES2015",
+    "module": "ES2015",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@upward/authentication": ["modules/authentication/index.ts"],
+      "@upward/user": ["modules/user-module/index.ts"],
+      "@upward/training": ["modules/training-module/index.ts"],
+      "@upward/stats": ["modules/statistics-module/index.ts"],
+      "@upward/groups": ["modules/groups-module/index.ts"],
+      "@upward/encourage": ["modules/encouragment-module/index.ts"],
+      "@upward/analytics": ["shared-libs/analytics/index.ts"],
+      "@upward/assets": ["shared-libs/assets/index.ts"],
+      "@upward/core-ui-library": ["shared-libs/core-ui-library/index.ts"],
+      "@upward/core-ui-widgets": ["shared-libs/core-ui-widgets/index.ts"],
+      "@upward/store": ["modules/store-core/index.ts"],
+      "@upward/themes": ["shared-libs/themes/index.ts"],
+      "@upward/translations": ["shared-libs/translations/index.ts"],
+      "@upward/utilities": ["shared-libs/utilities/index.ts"],
+      "@upward/navigation": ["modules/navigation/index.ts"],
+      "@upward/constants": ["shared-libs/constants/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

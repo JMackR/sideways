@@ -1,0 +1,17 @@
+{
+  "name": "@upward/stats",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "watch": "jest --watch ",
+    "test:update": "jest -u",
+    "test:coverage": "jest --coverage",
+    "clean": "rimraf --no-glob ./coverage ./tsconfig.tsbuildinfo",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache --cache-location ../.cache/eslint/layout-controls.eslintcache",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
+    "fix-all-files": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "dependencies": {}
+}

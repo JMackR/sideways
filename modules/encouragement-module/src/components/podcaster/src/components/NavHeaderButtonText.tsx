@@ -1,0 +1,39 @@
+import React from 'reactn';
+import { navHeader } from '../styles';
+import { PressableWithOpacity, Text } from './';
+
+type Props = {
+  accessibilityHint?: string;
+  accessibilityLabel?: string;
+  color?: string;
+  disabled?: boolean;
+  handlePress: any;
+  style?: any;
+  testID: string;
+  text: string;
+};
+
+export const NavHeaderButtonText = (props: Props) => {
+  const { accessibilityHint, accessibilityLabel, color, disabled, handlePress, testID, text } = props;
+
+  const buttonTextStyle = [navHeader.buttonText];
+
+  if (color) {
+    buttonTextStyle.push({ color });
+  }
+
+  return (
+    <PressableWithOpacity
+      accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityRole="button"
+      disabled={disabled}
+      onPress={handlePress}
+      testID={`${testID}_nav_header_button_text`.prependTestId()}
+    >
+      <Text allowFontScaling={false} style={buttonTextStyle} testID={`${testID}_text`}>
+        {text}
+      </Text>
+    </PressableWithOpacity>
+  );
+};

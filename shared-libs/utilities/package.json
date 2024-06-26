@@ -1,0 +1,22 @@
+{
+  "name": "@upward/utilities",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo hello utilities",
+    "clean": "rimraf --no-glob ./coverage ./tsconfig.tsbuildinfo",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache --cache-location ../../.cache/eslint/utilities.eslintcache",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
+    "test-unit": "jest --config jest.config.js",
+    "fix-all-files": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "dependencies": {},
+  "jest": {
+    "setupFiles": [
+      "./test-setup.ts"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.202"
+  }
+}

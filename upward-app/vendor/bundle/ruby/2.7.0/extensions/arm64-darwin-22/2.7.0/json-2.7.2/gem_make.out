@@ -1,0 +1,13 @@
+current directory: /Users/helix/Downloads/react-mobile-application 2/upwards/vendor/bundle/ruby/2.7.0/gems/json-2.7.2/ext/json
+/Users/helix/.asdf/installs/ruby/2.7.5/bin/ruby -I /Users/helix/.asdf/installs/ruby/2.7.5/lib/ruby/2.7.0 -r ./siteconf20240516-54732-1iyjhqs.rb extconf.rb
+creating Makefile
+
+current directory: /Users/helix/Downloads/react-mobile-application 2/upwards/vendor/bundle/ruby/2.7.0/gems/json-2.7.2/ext/json
+make "DESTDIR=" clean
+
+current directory: /Users/helix/Downloads/react-mobile-application 2/upwards/vendor/bundle/ruby/2.7.0/gems/json-2.7.2/ext/json
+make "DESTDIR="
+make: Nothing to be done for `all'.
+
+current directory: /Users/helix/Downloads/react-mobile-application 2/upwards/vendor/bundle/ruby/2.7.0/gems/json-2.7.2/ext/json
+make "DESTDIR=" install

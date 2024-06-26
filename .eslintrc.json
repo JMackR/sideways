@@ -1,0 +1,15 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "@nx", "prettier", "react", "react-native"],
+  "extends": ["plugin:@typescript-eslint/recommended"],
+  "ignorePatterns": [],
+  "parserOptions": {
+    "requireConfigFile": false, // <== ADD THIS
+    "ecmaVersion": 2015, // Allows for the parsing of modern ECMAScript features
+    "sourceType": "module" // Allows for the use of imports
+  },
+  "rules": {
+    "@typescript-eslint/no-explicit-any": ["off"]
+  }
+}

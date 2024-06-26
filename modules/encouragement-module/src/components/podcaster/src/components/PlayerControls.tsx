@@ -1,0 +1,447 @@
+import { checkIfVideoFileOrVideoLiveType } from 'podverse-shared';
+import { StyleSheet, View, Image, ImageSourcePropType } from 'react-native';
+import React from 'reactn';
+import { translate } from '../lib/i18n';
+import { PV } from '../resources';
+import {
+  playerCheckIfStateIsBuffering,
+  playerCheckIfStateIsPlaying,
+  playerJumpBackward,
+  playerJumpForward,
+  playerPlayNextFromQueue,
+  playerPlayPreviousFromQueue,
+} from '../services/player';
+import { QueueRepeatModeMusic } from '../services/queue';
+import {
+  playerPlayNextChapterOrQueueItem,
+  playerPlayPreviousChapterOrReturnToBeginningOfTrack,
+  playerSetPlaybackSpeed,
+  playerTogglePlay,
+} from '../state/actions/player';
+import { loadChapterPlaybackInfo } from '../state/actions/playerChapters';
+import { setQueueRepeatModeMusic } from '../state/actions/queue';
+import { darkTheme, iconStyles, playerStyles } from '../styles';
+import { PlayerMoreActionSheet } from './PlayerMoreActionSheet';
+import {
+  ActivityIndicator,
+  Icon,
+  PlayerLiveButton,
+  PlayerProgressBar,
+  PressableWithOpacity,
+  Text,
+  View as PVView,
+} from './';
+
+type Props = {
+  navigation: any;
+};
+
+type State = {
+  progressValue: number;
+  showPlayerMoreActionSheet: boolean;
+};
+
+const testIDPrefix = 'player_controls';
+
+export class PlayerControls extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      progressValue: 0,
+      showPlayerMoreActionSheet: false,
+    };
+  }
+
+  _adjustSpeed = async () => {
+    const { playbackRate } = this.global.player;
+    const speeds = await PV.Player.speeds();
+    const index = speeds.indexOf(playbackRate);
+
+    let newSpeed;
+    if (speeds.length - 1 === index) {
+      newSpeed = speeds[0];
+    } else {
+      newSpeed = speeds[index + 1];
+    }
+
+    await playerSetPlaybackSpeed(newSpeed);
+  };
+
+  _navToStopWatchScreen = () => {
+    const { navigation } = this.props;
+    navigation.navigate(PV.RouteNames.SleepTimerScreen);
+  };
+
+  _playerJumpBackward = async () => {
+    const { jumpBackwardsTime } = this.global;
+    const progressValue = await playerJumpBackward(jumpBackwardsTime);
+    this.setState({ progressValue });
+    loadChapterPlaybackInfo();
+  };
+
+  _playerJumpForward = async () => {
+    const { jumpForwardsTime } = this.global;
+    const progressValue = await playerJumpForward(jumpForwardsTime);
+    this.setState({ progressValue });
+    loadChapterPlaybackInfo();
+  };
+
+  _hidePlayerMoreActionSheet = () => {
+    this.setState({ showPlayerMoreActionSheet: false });
+  };
+
+  _showPlayerMoreActionSheet = () => {
+    this.setState({
+      showPlayerMoreActionSheet: true,
+    });
+  };
+
+  _renderPlayerControlIcon = (source: ImageSourcePropType, testID: string, disabled?: boolean) => {
+    const disabledStyle: { tintColor?: string } = {};
+    if (disabled) {
+      disabledStyle.tintColor = PV.Colors.grayDark;
+    }
+    return (
+      <PVView style={styles.iconContainer} transparent testID={testID}>
+        <Image source={source} resizeMode="contain" style={[styles.icon, disabledStyle]} />
+      </PVView>
+    );
+  };
+
+  getQueueRepeatModeProps = (queueRepeatModeMusic: QueueRepeatModeMusic) => {
+    let props = {
+      repeatModeAriaLabel: translate('ARIA LABEL - repeat mode - off'),
+      repeatModeMaterialIconName: 'repeat',
+    };
+    if (queueRepeatModeMusic === 'queue') {
+      props = {
+        repeatModeAriaLabel: translate('ARIA LABEL - repeat mode - queue'),
+        repeatModeMaterialIconName: 'repeat',
+      };
+    } else if (queueRepeatModeMusic === 'track') {
+      props = {
+        repeatModeAriaLabel: translate('ARIA LABEL - repeat mode - track'),
+        repeatModeMaterialIconName: 'repeat-one-on',
+      };
+    }
+    return props;
+  };
+
+  _changeQueueRepeatModeMusic = () => {
+    const { queueRepeatModeMusic } = this.global.player;
+    if (queueRepeatModeMusic === 'queue') {
+      setQueueRepeatModeMusic('off');
+    } else {
+      setQueueRepeatModeMusic('queue');
+    }
+  };
+
+  render() {
+    const { navigation } = this.props;
+    const { progressValue, showPlayerMoreActionSheet } = this.state;
+    const {
+      currentTocChapter,
+      currentTocChapters,
+      currentTocChaptersStartTimePositions,
+      globalTheme,
+      jumpBackwardsTime,
+      jumpForwardsTime,
+      player,
+      screenPlayer,
+    } = this.global;
+    const { backupDuration, hidePlaybackSpeedButton, playbackRate, playbackState, queueRepeatModeMusic } = player;
+    const { isLoading } = screenPlayer;
+    const hasErrored = playbackState === PV.Player.errorState;
+    const hitSlop = {
+      bottom: 8,
+      left: 8,
+      right: 8,
+      top: 8,
+    };
+
+    // nowPlayingItem will be undefined when loading from a deep link
+    let { nowPlayingItem } = player;
+    nowPlayingItem = nowPlayingItem || {};
+    const { liveItem } = nowPlayingItem;
+    const isMusic = nowPlayingItem.podcastMedium === PV.Medium.music;
+
+    let playButtonIcon = <Icon name="play" size={20} testID={`${testIDPrefix}_play_button`} />;
+    let playButtonAdjust = { paddingLeft: 2 } as any;
+    let playButtonAccessibilityHint = translate('ARIA HINT - resume playing');
+    let playButtonAccessibilityLabel = translate('Play');
+
+    if (hasErrored) {
+      playButtonIcon = (
+        <Icon
+          color={globalTheme === darkTheme ? iconStyles.lightRed.color : iconStyles.darkRed.color}
+          name={'exclamation-triangle'}
+          size={35}
+          testID={`${testIDPrefix}_error`}
+        />
+      );
+      playButtonAdjust = { paddingBottom: 8 } as any;
+    } else if (playerCheckIfStateIsPlaying(playbackState)) {
+      playButtonIcon = <Icon name="pause" size={20} testID={`${testIDPrefix}_pause_button`} />;
+      playButtonAdjust = {};
+      playButtonAccessibilityHint = translate('ARIA HINT - pause playback');
+      playButtonAccessibilityLabel = translate('Pause');
+    } else if (playerCheckIfStateIsBuffering(playbackState)) {
+      playButtonIcon = <ActivityIndicator testID={testIDPrefix} />;
+      playButtonAdjust = { paddingLeft: 2, paddingTop: 2 };
+      playButtonAccessibilityHint = '';
+      playButtonAccessibilityLabel = translate('Episode is loading');
+    }
+
+    let { clipEndTime, clipStartTime } = nowPlayingItem;
+    if (!clipStartTime && currentTocChapter?.startTime) {
+      clipStartTime = currentTocChapter?.startTime;
+      clipEndTime = currentTocChapter?.endTime;
+    }
+
+    const jumpBackAccessibilityLabel = `${translate('Jump back')} ${jumpBackwardsTime} ${translate('seconds')}`;
+    const jumpForwardAccessibilityLabel = `${translate('Jump forward')} ${jumpForwardsTime} ${translate('seconds')}`;
+
+    const previousButtonAccessibilityLabel =
+      currentTocChapters && currentTocChapters.length > 1
+        ? translate('Go to previous chapter')
+        : translate('Return to beginning of episode');
+
+    const nextButtonAccessibilityLabel =
+      currentTocChapters && currentTocChapters.length > 1
+        ? translate('Go to next chapter')
+        : translate('Skip to next item in your queue');
+
+    const isVideo = checkIfVideoFileOrVideoLiveType(nowPlayingItem?.episodeMediaType);
+    const hasChapters = currentTocChapters?.length > 1;
+
+    const { repeatModeAriaLabel, repeatModeMaterialIconName } = this.getQueueRepeatModeProps(queueRepeatModeMusic);
+
+    return (
+      <View style={[styles.wrapper, globalTheme.player]}>
+        <View style={styles.progressWrapper}>
+          <PlayerProgressBar
+            backupDuration={backupDuration}
+            clipEndTime={clipEndTime}
+            clipStartTime={clipStartTime}
+            currentTocChaptersStartTimePositions={currentTocChaptersStartTimePositions}
+            globalTheme={globalTheme}
+            isLiveItem={!!liveItem}
+            isLoading={isLoading}
+            value={progressValue}
+          />
+        </View>
+        <View style={styles.playerControlsMiddleRow}>
+          <View style={styles.playerControlsMiddleRowTop}>
+            {((!isVideo && !liveItem) || (isVideo && !liveItem && hasChapters)) && (
+              <PressableWithOpacity
+                accessibilityLabel={previousButtonAccessibilityLabel}
+                accessibilityRole="button"
+                onLongPress={playerPlayPreviousFromQueue}
+                onPress={playerPlayPreviousChapterOrReturnToBeginningOfTrack}
+                style={[playerStyles.icon, { flexDirection: 'row' }]}
+              >
+                {this._renderPlayerControlIcon(PV.Images.PREV_TRACK, `${testIDPrefix}_previous_track`)}
+              </PressableWithOpacity>
+            )}
+            {!liveItem && (
+              <PressableWithOpacity
+                accessibilityLabel={jumpBackAccessibilityLabel}
+                accessibilityRole="button"
+                onPress={this._playerJumpBackward}
+                style={playerStyles.icon}
+              >
+                {this._renderPlayerControlIcon(PV.Images.JUMP_BACKWARDS, `${testIDPrefix}_jump_backward`)}
+                <View importantForAccessibility="no-hide-descendants" style={styles.skipTimeTextWrapper}>
+                  <Text style={styles.skipTimeText}>{jumpBackwardsTime.toString()}</Text>
+                </View>
+              </PressableWithOpacity>
+            )}
+            <PressableWithOpacity
+              accessibilityHint={playButtonAccessibilityHint}
+              accessibilityLabel={playButtonAccessibilityLabel}
+              onPress={playerTogglePlay}
+            >
+              <View importantForAccessibility="no-hide-descendants" style={[playerStyles.playButton, playButtonAdjust]}>
+                {playButtonIcon}
+              </View>
+            </PressableWithOpacity>
+            {!liveItem && (
+              <PressableWithOpacity
+                accessibilityLabel={jumpForwardAccessibilityLabel}
+                accessibilityRole="button"
+                onPress={this._playerJumpForward}
+                style={playerStyles.icon}
+              >
+                {this._renderPlayerControlIcon(PV.Images.JUMP_AHEAD, `${testIDPrefix}_step_forward`)}
+                <View importantForAccessibility="no-hide-descendants" style={styles.skipTimeTextWrapper}>
+                  <Text style={styles.skipTimeText}>{jumpForwardsTime.toString()}</Text>
+                </View>
+              </PressableWithOpacity>
+            )}
+            {((!isVideo && !liveItem) || (isVideo && !liveItem && hasChapters)) && (
+              <PressableWithOpacity
+                accessibilityLabel={nextButtonAccessibilityLabel}
+                accessibilityRole="button"
+                onLongPress={playerPlayNextFromQueue}
+                onPress={playerPlayNextChapterOrQueueItem}
+                style={[playerStyles.icon, { flexDirection: 'row' }]}
+              >
+                {this._renderPlayerControlIcon(PV.Images.NEXT_TRACK, `${testIDPrefix}_skip_track`)}
+              </PressableWithOpacity>
+            )}
+          </View>
+        </View>
+        <View style={styles.playerControlsBottomRow}>
+          <View style={styles.playerControlsBottomRowInner}>
+            <PressableWithOpacity
+              accessibilityHint={translate('ARIA HINT - go to the sleep timer screen')}
+              accessibilityLabel={translate('Sleep Timer')}
+              accessibilityRole="button"
+              hitSlop={hitSlop}
+              onPress={this._navToStopWatchScreen}
+            >
+              <View style={[styles.playerControlsBottomButton, { marginTop: 2 }]}>
+                <Icon name="moon" size={20} solid testID={`${testIDPrefix}_sleep_timer`} />
+              </View>
+            </PressableWithOpacity>
+            {!liveItem && isMusic && (
+              <PressableWithOpacity
+                accessibilityLabel={repeatModeAriaLabel}
+                accessibilityRole="button"
+                hitSlop={hitSlop}
+                onPress={this._changeQueueRepeatModeMusic}
+              >
+                <View style={[styles.playerControlsBottomButton, { marginTop: -2 }]}>
+                  <Icon
+                    materialIconName={repeatModeMaterialIconName}
+                    size={26}
+                    solid
+                    {...(queueRepeatModeMusic === 'queue' ? { color: PV.Colors.blueLighter } : {})}
+                    testID={`${testIDPrefix}_repeat_mode`}
+                  />
+                </View>
+              </PressableWithOpacity>
+            )}
+            {!liveItem && !hidePlaybackSpeedButton && !isMusic && (
+              <PressableWithOpacity
+                accessibilityHint={translate('ARIA HINT - current playback speed')}
+                accessibilityLabel={`${playbackRate}X`}
+                accessibilityRole="button"
+                hitSlop={hitSlop}
+                onPress={this._adjustSpeed}
+              >
+                <Text
+                  fontSizeLargestScale={PV.Fonts.largeSizes.sm}
+                  style={[styles.playerControlsBottomButton, styles.playerControlsBottomRowText]}
+                  testID={`${testIDPrefix}_playback_rate`}
+                >
+                  {`${playbackRate}X`}
+                </Text>
+              </PressableWithOpacity>
+            )}
+            {!!liveItem && <PlayerLiveButton />}
+            <PressableWithOpacity
+              accessibilityHint={translate('ARIA HINT - show more player screen options')}
+              accessibilityLabel={translate('More player options')}
+              accessibilityRole="button"
+              hitSlop={hitSlop}
+              onPress={this._showPlayerMoreActionSheet}
+            >
+              <View accessible={false} style={styles.playerControlsBottomButton}>
+                <Icon name="ellipsis-h" size={24} testID={`${testIDPrefix}_more`} />
+              </View>
+            </PressableWithOpacity>
+          </View>
+        </View>
+        <PlayerMoreActionSheet
+          handleDismiss={this._hidePlayerMoreActionSheet}
+          navigation={navigation}
+          showModal={showPlayerMoreActionSheet}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  playerControlsBottomButton: {
+    alignItems: 'center',
+    minHeight: 32,
+    paddingVertical: 4,
+    textAlign: 'center',
+    minWidth: 54,
+  },
+  playerControlsBottomRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    minHeight: PV.Player.styles.bottomRow.height,
+    marginHorizontal: 15,
+    marginTop: 10,
+  },
+  playerControlsBottomRowInner: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    maxWidth: PV.Player.playerControlsMaxWidth,
+  },
+  playerControlsBottomRowText: {
+    fontSize: PV.Fonts.sizes.md,
+    fontWeight: PV.Fonts.weights.bold,
+  },
+  playerControlsMiddleRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
+  playerControlsMiddleRowTop: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 2,
+    maxWidth: PV.Player.playerControlsMaxWidth,
+  },
+  progressWrapper: {
+    marginTop: 5,
+  },
+  skipButtonText: {
+    fontSize: 12,
+    width: '100%',
+    position: 'absolute',
+    bottom: -5,
+    textAlign: 'center',
+  },
+  skipTimeTextWrapper: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  skipTimeText: {
+    fontSize: 14,
+  },
+  speed: {
+    alignItems: 'center',
+    paddingVertical: 4,
+    width: 54,
+  },
+  topRow: {
+    minHeight: 52,
+    paddingTop: 5,
+  },
+  wrapper: {
+    borderTopWidth: 1,
+  },
+  iconContainer: {
+    width: 45,
+    height: 45,
+  },
+  icon: {
+    tintColor: PV.Colors.white,
+    width: '100%',
+    height: '100%',
+  },
+});

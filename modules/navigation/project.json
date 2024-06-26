@@ -1,0 +1,21 @@
+{
+  "name": "@upward/navigation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "@upward/navigation-routes",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "@upward/navigation-routes/jest.config.ts"
+      }
+    }
+  },
+  "peer-dependencies": {}
+}

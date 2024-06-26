@@ -1,0 +1,20 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+
+**/ios/
+**/android/
+.nx
+tsconfig.base.json
+upwards-app/jest.config.ts
+upwards-app/react-naive.config.json
+upwards-app/README.md
+node_modules
+upwards-app/vendor/
+storybook/.*
+.*
+azure-pipelines.yml
+babel.config.json
+nx.json
+README.md
+

@@ -1,0 +1,238 @@
+trigger:
+  branches:
+    include:
+      - dev
+      - main
+  paths:
+    include:
+      - '*'
+    exclude:
+      - upwards/android/app/build.gradle
+      - upwards/android/fastlane/report.xml
+      - upwards/ios/upwards.xcodeproj/project.pbxproj
+      - upwards/ios/upwardsPROD-Info.plist
+      - upwards/ios/upwardsQA-Info.plist
+      - upwards/ios/upwardsUAT-Info.plist
+      - upwards/ios/upwards/Info.plist
+      - upwards/ios/upwardsTests/Info.plist
+      - upwards/ios/fastlane/report.xml
+  batch: true
+
+pool:
+  name: 'macvm'
+
+workspace:
+  clean: all
+
+variables:
+  - group: Mobile
+  - name: branchName
+    ${{if eq(variables['Build.SourceBranch'], 'refs/heads/dev')}}:
+      value: qa
+    ${{if eq(variables['Build.SourceBranch'], 'refs/heads/main')}}:
+      value: prod
+  - name: isDevOrMain
+    value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/dev'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))]
+  - name: isDev
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/dev')]
+  - name: isPR
+    value: $[eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/dev')]
+
+steps:
+  - checkout: self
+    persistCredentials: true
+
+  # DOWNLOAD THE SECURE FILES TO THE AGENT
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: 'google-prod-creds.json'
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: 'AuthKey_XRN43LMC76.p8'
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: 'upload-prod.jks'
+
+  # Install Node Modules
+  - task: NodeTool@0
+    displayName: 'Install Node Modules'
+    inputs:
+      versionSpec: '20.x'
+    enabled: true
+
+  # INSTALL NPM
+  # - script: npm install --registry https://registry.npmjs.org
+  #   displayName: Install NPM
+  #   enabled: true
+
+  # INSTALL YARN
+  - task: YarnInstaller@3
+    displayName: Install Yarn
+    inputs:
+      versionSpec: '1.x'
+      checkLatest: true
+
+  #RUN YARN
+  - script: yarn
+    displayName: Install YARN WORKSPACES
+    enabled: true
+
+  # INSTALL JAVA
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '18'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'LocalDirectory'
+      jdkFile: '/Users/tfsbuild/java-bin/java18-home.tar.gz'
+      jdkDestinationDirectory: '/Users/tfsbuild/java-temp/'
+      cleanDestinationDirectory: true
+    displayName: install java
+    enabled: true
+
+  - task: UseDotNet@2
+    displayName: Install Dotnet
+    inputs:
+      packageType: 'sdk'
+      version: '6.x'
+
+  # Remove Pod lock
+  - task: CmdLine@2
+    inputs:
+      script: |
+        rm Podfile.lock
+      workingDirectory: 'upwards/ios'
+    displayName: Remove Lock
+    enabled: true
+
+    #do we need to install COCOA POD if we already have it installed on VM.
+  - task: CocoaPods@0
+    displayName: 'Install Cocoapods'
+    inputs:
+      workingDirectory: 'upwards/ios'
+      forceRepoUpdate: true
+    enabled: true
+
+  # IOS BUNDLE INSTALL
+  - task: CmdLine@2
+    inputs:
+      script: |
+        eval "$(~/.rbenv/bin/rbenv init - bash)"
+        rbenv global 3.1.2 
+        bundle install
+      workingDirectory: 'upwards/ios'
+    displayName: Install Gems IOS
+    enabled: true
+
+  # ANDROID BUNDLE INSTALL
+  - task: CmdLine@2
+    inputs:
+      script: |
+        eval "$(~/.rbenv/bin/rbenv init - bash)"
+        rbenv global 3.1.2 
+        bundle install
+      workingDirectory: 'upwards/android'
+    displayName: Install Gems ANDROID
+    enabled: true
+
+  # UNIT TESTS
+  - script: |
+      yarn run coverage
+    displayName: UNIT TESTING
+    enabled: true
+    # condition: eq(variables.isPR, true)
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: 'coverage/cobertura-coverage.xml'
+    displayName: 'Publish Code Coverage'
+    enabled: true
+
+    # IOS BUILD
+  - script: |
+      eval "$(~/.rbenv/bin/rbenv init - bash)"
+      rbenv global 3.1.2 
+      yarn run ios:build
+    workingDirectory: 'upwards'
+    displayName: IOS BUILD
+    env:
+      PAT: $(PAT)
+      API_KEY: $(API_KEY)
+    enabled: true
+    condition: eq(variables.isDev, true)
+
+  # ANDROID BUILD
+  - script: |
+      eval "$(~/.rbenv/bin/rbenv init - bash)"
+      rbenv global 3.1.2 
+      export ANDROID_HOME=/users/tfsbuild/android
+      echo $ANDROID_HOME
+      source /users/tfsbuild/.bashrc
+      yes | sdkmanager --licenses
+      yarn run android:build
+    workingDirectory: 'upwards'
+    displayName: ANDROID BUILD
+    enabled: true
+    condition: eq(variables.isDev, true)
+
+  # PUSH FILE CHANGES TO SOURCE BRANCH
+  - script: |
+      fullBranch=$(Build.SourceBranch)
+      branch=$(echo "$fullBranch" | sed 's/refs\/heads\///')
+      echo $branch
+      git status
+      git checkout $branch
+
+      git add \
+      upwards/android/app/build.gradle \
+      upwards/android/fastlane/report.xml \
+      upwards/ios/upwards.xcodeproj/project.pbxproj \
+      upwards/ios/upwardsPROD-Info.plist \
+      upwards/ios/upwardsQA-Info.plist \
+      upwards/ios/upwardsUAT-Info.plist \
+      upwards/ios/upwards/Info.plist \
+      upwards/ios/upwardsTests/Info.plist \
+      upwards/ios/fastlane/report.xml
+
+      git commit -m "Fastlane Output Update"
+      git push origin $branch
+    displayName: Merge files
+    enabled: true
+    condition: eq(variables.isDev, true)
+
+  # FASTLANE IOS DEPLOY
+  - script: |
+      eval "$(~/.rbenv/bin/rbenv init - bash)"
+      rbenv global 3.1.2 
+      yarn run bundle-ios
+      yarn run ios:deploy:$(branchName)
+    workingDirectory: 'upwards'
+    displayName: IOS fastlane $(branchName)
+    env:
+      PAT: $(PAT)
+      FIREBASE_TOKEN: $(FIREBASE_TOKEN)
+      API_KEY: $(API_KEY)
+    enabled: true
+    condition: eq(variables.isDevOrMain, true)
+
+  # FASTLANE ANDROID DEPLOY
+  - script: |
+      eval "$(~/.rbenv/bin/rbenv init - bash)"
+      rbenv global 3.1.2 
+      export ANDROID_HOME=/users/tfsbuild/android
+      echo $ANDROID_HOME
+      source /users/tfsbuild/.bashrc
+      yes | sdkmanager --licenses
+      yarn run android:deploy:$(branchName)
+    workingDirectory: 'upwards'
+    displayName: ANDROID fastlane $(branchName)
+    env:
+      FIREBASE_TOKEN: $(FIREBASE_TOKEN)
+      SAUCELABS_USERNAME: $(SAUCELABS_USERNAME)
+      SAUCELABS_API_KEY: $(SAUCELABS_API_KEY)
+      KEY_PASSWORD: $(KEY_PASSWORD)
+      KEY_ALIAS: $(KEY_ALIAS)
+      KEYSTORE_PASSWORD: $(KEYSTORE_PASSWORD)
+      KEYSTORE_FILE: $(KEYSTORE_FILE)
+      GPLAY_SERVICE_ACCOUNT_KEY: $(GPLAY_SERVICE_ACCOUNT_KEY)
+    enabled: true
+    condition: eq(variables.isDevOrMain, true)

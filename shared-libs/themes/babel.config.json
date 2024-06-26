@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@nx/react/babel",
+      {
+        "runtime": "automatic",
+        "useBuiltIns": "usage"
+      }
+    ]
+  ],
+  "plugins": [
+    ["@babel/plugin-transform-modules-commonjs"],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties"]
+  ],
+  "env": {
+    "test": {
+      "presets": ["module:metro-react-native-babel-preset"]
+    }
+  }
+}

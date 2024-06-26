@@ -1,0 +1,1 @@
+export { encryptPlainText } from './encrypt';

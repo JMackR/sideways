@@ -1,0 +1,28 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    // "source.fixAll.eslint": "explicit",
+    // "source.organizeImports": "explicit"
+  },
+  "github.copilot.editor.enableCodeActions": false,
+  // Disable vscode formatting for js,jsx,ts,tsx files
+  // to allow dbaeumer.vscode-eslint to format them
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "eslint.format.enable": true,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all",
+  "diffEditor.ignoreTrimWhitespace": false,
+"editor.suggestSelection": "first",
+
+  // https://github.com/Microsoft/vscode-eslint#mono-repository-setup
+  "eslint.workingDirectories": [
+    "./storybook",
+    "./upwards-app",
+    { "pattern": "./shared-libs/*/" },
+    { "pattern": "shared-libs/**/**" }
+  ],
+  "git.ignoreLimitWarning": true
+}

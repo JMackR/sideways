@@ -1,0 +1,10 @@
+{
+  "name": "@upward/translations",
+  "version": "1.0.0",
+  "description": "translations",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "i18next": "23.7.11"
+  }
+}

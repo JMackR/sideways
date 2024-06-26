@@ -1,0 +1,23 @@
+{
+  "name": "@upward/constants",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "jest --projects test/react-native test/non-react",
+    "watch": "jest --projects  test/react --coverage --watch ",
+    "test:update": "jest --projects  test/react -u",
+    "test:react-native": "jest --projects test/react-native",
+    "clean": "rimraf --no-glob ./coverage ./tsconfig.tsbuildinfo",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx --cache --cache-location ../.cache/eslint/layout-controls.eslintcache",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
+    "test-unit": "jest --config jest.config.js",
+    "fix-all-files": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "dependencies": {},
+  "jest": {
+    "setupFiles": [
+      "./test-setup.ts"
+    ]
+  }
+}

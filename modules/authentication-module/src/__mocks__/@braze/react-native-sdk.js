@@ -1,0 +1,15 @@
+jest.mock('@braze/react-native-sdk', () => ({
+  initialize: jest.fn(),
+  getUserAlias: jest.fn(),
+  track: jest.fn(),
+  displayMessage: jest.fn(),
+  logCustomEvent: jest.fn(),
+  getInstallationId: jest.fn(),
+  setCustomDataAttributes: jest.fn(),
+  setUserId: jest.fn(),
+  setUserAlias: jest.fn(),
+  wipeData: jest.fn(),
+  requestLocation: jest.fn(),
+  enableSDK: jest.fn(),
+  disableSDK: jest.fn(),
+}));
