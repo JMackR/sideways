@@ -1,5 +1,5 @@
 import { Margin, Text, Stack, Overlay } from '@upward/core-ui-library';
-import { Toggle } from '@upward/core-ui-widgets';
+import { Toggle } from '@upward/core-ui-library';
 import { useState } from 'react';
 
 import DatePicker from 'react-native-date-picker';

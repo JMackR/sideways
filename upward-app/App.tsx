@@ -1,5 +1,5 @@
 import { DropdownAlertService, ErrorBoundary, GenericErrorFallback } from '@upward/core-ui-widgets';
-import { Podcast } from '@upward/encourage';
+// import { Podcast } from '@upward/encourage';
 import { store } from '@upward/store';
 import { ThemeProvider } from '@upward/themes';
 import '@upward/translations/i18n/i18n';
@@ -29,7 +29,7 @@ function App(): React.JSX.Element {
               <ThemeProvider>
                 <DropdownAlertService>
                   <RootNavigator />
-                  <Podcast />
+                  {/* <Podcast /> */}
                 </DropdownAlertService>
               </ThemeProvider>
             </GestureHandlerRootView>

@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getVersion } from 'react-native-device-info';
 import { errorLogger } from '../lib/logger';
 import { hasValidNetworkConnection } from '../lib/network';

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { getTrackingStatus, requestTrackingPermission } from 'react-native-tracking-transparency';
 import { errorLogger } from '../lib/logger';

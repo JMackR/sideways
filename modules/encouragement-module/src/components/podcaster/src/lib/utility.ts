@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-regexp-exec */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 
 // NOTE: remember to update src/lib/i18n.ts

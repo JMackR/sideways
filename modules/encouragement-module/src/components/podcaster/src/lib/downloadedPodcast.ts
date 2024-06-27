@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkIfContainsStringMatch, getExtensionFromUrl } from 'podverse-shared';
 import { FileSystem } from 'react-native-file-access';
 import RNFS from 'react-native-fs';

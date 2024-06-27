@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, StyleSheet } from 'react-native';
 import Config from 'react-native-config';
 import RNPickerSelect from 'react-native-picker-select';

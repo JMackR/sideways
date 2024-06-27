@@ -8,7 +8,7 @@ import RNBackgroundDownloader from '@kesha-antonov/react-native-background-downl
 import RNFS from 'react-native-fs';
 import * as ScopedStorage from 'react-native-scoped-storage';
 import { AndroidScoped, FileSystem } from 'react-native-file-access';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PV } from '../resources';
 import PVEventEmitter from '../services/eventEmitter';
 import { getPodcastCredentialsHeader } from '../services/parser';

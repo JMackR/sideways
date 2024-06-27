@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { encode as btoa } from 'base-64';
 import pLimit from 'p-limit';
 import { checkIfContainsStringMatch, isValidDate } from 'podverse-shared';

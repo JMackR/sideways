@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
 import React from 'reactn';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Divider, FastImage, Icon, NavDismissIcon, PressableWithOpacity, ScrollView, Text, View } from '../components';
 import { translate } from '../lib/i18n';
 import { readableDate } from '../lib/utility';

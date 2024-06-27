@@ -4,7 +4,7 @@ import { Keyboard, StyleSheet } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import React from 'reactn';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Button,
   Divider,
@@ -86,8 +86,8 @@ export class V4VBoostagramScreen extends React.Component<Props, State> {
       ...(!!showBackButton
         ? {}
         : {
-            headerLeft: () => <NavDismissIcon handlePress={navigation.dismiss} testID={testIDPrefix} />,
-          }),
+          headerLeft: () => <NavDismissIcon handlePress={navigation.dismiss} testID={testIDPrefix} />,
+        }),
       title: translate('Boostagram'),
       headerRight: null,
     };
@@ -243,10 +243,10 @@ export class V4VBoostagramScreen extends React.Component<Props, State> {
 
     const boostFiatAmountText = activeProvider
       ? v4vGetSatoshisInFormattedFiatValue({
-          btcRateInFiat: activeProvider.fiat_rate_float,
-          satoshiAmount: localBoostAmount,
-          currency: activeProvider.fiat_currency,
-        })
+        btcRateInFiat: activeProvider.fiat_rate_float,
+        satoshiAmount: localBoostAmount,
+        currency: activeProvider.fiat_currency,
+      })
       : '';
 
     const podcastTitle = boostagramItem?.podcastTitle?.trim() || translate('Untitled Podcast');

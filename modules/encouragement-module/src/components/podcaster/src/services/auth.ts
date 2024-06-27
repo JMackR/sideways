@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, Linking } from 'react-native';
 import * as RNKeychain from 'react-native-keychain';
 import { errorLogger } from '../lib/logger';

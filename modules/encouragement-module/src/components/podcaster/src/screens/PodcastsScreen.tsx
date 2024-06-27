@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import { hasNotch, hasDynamicIsland } from 'react-native-device-info';
 import debounce from 'lodash/debounce';
@@ -1186,10 +1186,10 @@ export class PodcastsScreen extends React.Component<Props, State> {
       const hasInternetConnection = await hasValidNetworkConnection();
       const tempQueryObj: any = !tempQueryEnabled
         ? {
-            tempQueryEnabled: true,
-            tempQueryFrom: queryFrom,
-            tempQuerySort: querySort,
-          }
+          tempQueryEnabled: true,
+          tempQueryFrom: queryFrom,
+          tempQuerySort: querySort,
+        }
         : {};
       this.setState(tempQueryObj, () => {
         const queryFrom = !hasInternetConnection ? PV.Filters._downloadedKey : PV.Filters._allPodcastsKey;

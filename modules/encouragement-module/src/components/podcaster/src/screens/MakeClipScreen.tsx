@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkIfVideoFileOrVideoLiveType } from 'podverse-shared';
 import { Alert, Modal, Pressable, StyleSheet, View as RNView, Image, ImageSourcePropType } from 'react-native';
 import Share from 'react-native-share';
@@ -335,9 +335,8 @@ export class MakeClipScreen extends React.Component<Props, State> {
                     const url = this.global.urlsWeb.clip + mediaRef.id;
                     let { nowPlayingItem } = this.global.player;
                     nowPlayingItem = nowPlayingItem || {};
-                    const title = `${data.title || translate('Untitled Clip')} – ${nowPlayingItem?.podcastTitle} – ${
-                      nowPlayingItem?.episodeTitle
-                    }${translate('clip created using brandName')}`;
+                    const title = `${data.title || translate('Untitled Clip')} – ${nowPlayingItem?.podcastTitle} – ${nowPlayingItem?.episodeTitle
+                      }${translate('clip created using brandName')}`;
                     try {
                       await Share.open({
                         title,

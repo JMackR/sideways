@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeModules, Platform, Alert } from 'react-native';
 import { translate } from './i18n';
 import { debugLogger } from './logger';

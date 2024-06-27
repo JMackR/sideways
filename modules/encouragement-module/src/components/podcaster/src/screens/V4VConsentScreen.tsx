@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import React from 'reactn';
@@ -21,7 +21,7 @@ export class V4VConsentScreen extends React.Component<Props, State> {
     };
   }
 
-  static navigationOptions = ({}) => {
+  static navigationOptions = ({ }) => {
     return {
       headerRight: null,
       title: null,

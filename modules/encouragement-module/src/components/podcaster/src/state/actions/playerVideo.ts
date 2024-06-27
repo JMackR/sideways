@@ -1,5 +1,5 @@
-// import AsyncStorage from '@react-native-community/async-storage'
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { checkIfVideoFileOrVideoLiveType, getExtensionFromUrl, NowPlayingItem } from 'podverse-shared';
 import { getGlobal, setGlobal } from 'reactn';
 import { errorLogger } from '../../lib/logger';

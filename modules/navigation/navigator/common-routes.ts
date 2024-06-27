@@ -2,14 +2,14 @@ import { ProfileMain, ManageProfile, ManageNotifications, ManageBiometrics } fro
 import { BibleReader } from '@upward/encourage';
 import { FullScreenModalOptions } from './common-options';
 import { NavigableRoute } from './routes';
-import { PodCastNavigator } from './stacks/podcast-stack/podcast-stack';
+// import { PodCastNavigator } from './stacks/podcast-stack/podcast-stack';
 
 export const commonRoutes = [
-  {
-    name: NavigableRoute.PODCAST_APP,
-    component: PodCastNavigator,
-    options: FullScreenModalOptions,
-  },
+  // {
+  //   name: NavigableRoute.PODCAST_APP,
+  //   component: PodCastNavigator,
+  //   options: FullScreenModalOptions,
+  // },
   {
     name: NavigableRoute.BIBLE_READER,
     component: BibleReader,

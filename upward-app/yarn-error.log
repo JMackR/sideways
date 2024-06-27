@@ -51,7 +51,7 @@ npm manifest:
       "@mapbox/mapbox-sdk": "^0.13.0",
       "@podverse/podcast-feed-parser": "^1.1.1",
       "@react-native-async-storage/async-storage": "1.23.1",
-      "@react-native-community/async-storage": "1.12.1",
+      "@react-native-async-storage/async-storage": "1.12.1",
       "@react-native-community/geolocation": "^3.2.1",
       "@react-native-community/masked-view": "0.1.11",
       "@react-native-community/netinfo": "^11.3.2",
@@ -2663,9 +2663,9 @@ Lockfile:
     dependencies:
       merge-options "^3.0.4"
   
-  "@react-native-community/async-storage@1.12.1":
+  "@react-native-async-storage/async-storage@1.12.1":
     version "1.12.1"
-    resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.12.1.tgz#25f821b4f6b13abe005ad67e47c6f1cee9f27b24"
+    resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.12.1.tgz#25f821b4f6b13abe005ad67e47c6f1cee9f27b24"
     integrity sha512-70WGaH3PKYASi4BThuEEKMkyAgE9k7VytBqmgPRx3MzJx9/MkspwqJGmn3QLCgHLIFUgF1pit2mWICbRJ3T3lg==
     dependencies:
       deep-assign "^3.0.0"

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import React from 'reactn';
@@ -115,9 +115,8 @@ export class SettingsScreenQueue extends React.Component<Props, State> {
               >
                 <View
                   accessible
-                  accessibilityLabel={`${translate('Auto-play episodes from podcast')} ${
-                    autoPlayEpisodesFromPodcastSelected?.label
-                  }`}
+                  accessibilityLabel={`${translate('Auto-play episodes from podcast')} ${autoPlayEpisodesFromPodcastSelected?.label
+                    }`}
                   importantForAccessibility="yes"
                   style={core.selectorWrapper}
                 >
@@ -183,9 +182,8 @@ export class SettingsScreenQueue extends React.Component<Props, State> {
                 <View
                   accessible
                   accessibilityHint={`${translate('ARIA HINT - auto queue new episodes position')}`}
-                  accessibilityLabel={`${translate('Auto queue new episodes position')} ${
-                    autoQueueOptionSelected?.label
-                  }`}
+                  accessibilityLabel={`${translate('Auto queue new episodes position')} ${autoQueueOptionSelected?.label
+                    }`}
                   importantForAccessibility="yes"
                   style={core.selectorWrapper}
                 >

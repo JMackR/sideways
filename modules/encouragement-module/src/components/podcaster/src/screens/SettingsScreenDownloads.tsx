@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import { StyleSheet, PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
 import React from 'reactn';

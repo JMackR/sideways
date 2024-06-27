@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AndroidAutoContentStyle, AndroidAutoBrowseTree } from 'react-native-track-player';
 import { getGlobal } from 'reactn';
 import { Episode, NowPlayingItem, Podcast, convertNowPlayingItemToEpisode } from 'podverse-shared';

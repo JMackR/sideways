@@ -1,7 +1,7 @@
 import { ValueTag, ValueTransaction } from 'podverse-shared';
 import { Keyboard, Pressable, StyleSheet } from 'react-native';
 import React from 'reactn';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Divider,
   FastImage,
@@ -219,10 +219,10 @@ export class FundingNowPlayingItemScreen extends React.Component<Props, State> {
 
     const streamingFiatAmountText = activeProvider
       ? v4vGetSatoshisInFormattedFiatValue({
-          btcRateInFiat: activeProvider.fiat_rate_float,
-          satoshiAmount: localStreamingAmount,
-          currency: activeProvider.fiat_currency,
-        })
+        btcRateInFiat: activeProvider.fiat_rate_float,
+        satoshiAmount: localStreamingAmount,
+        currency: activeProvider.fiat_currency,
+      })
       : '';
 
     return (

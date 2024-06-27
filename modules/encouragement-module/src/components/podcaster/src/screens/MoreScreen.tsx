@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getExtensionFromUrl, parseOpmlFile } from 'podverse-shared';
 import { SectionList, Alert } from 'react-native';
 import Config from 'react-native-config';
@@ -222,9 +222,8 @@ export class MoreScreen extends React.Component<Props, State> {
     const membershipTextStyle = getMembershipTextStyle(globalTheme, membershipStatus);
     const otherOptions = this._moreOtherOptions(membershipStatus);
 
-    const membershipAccessibilityLabel = `${translate('Membership')}${isLoggedIn ? ' – ' : ''} ${
-      membershipStatus ? membershipStatus : ''
-    }`;
+    const membershipAccessibilityLabel = `${translate('Membership')}${isLoggedIn ? ' – ' : ''} ${membershipStatus ? membershipStatus : ''
+      }`;
 
     return (
       <View style={core.backgroundView} testID={`${testIDPrefix}_view`}>

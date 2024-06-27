@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 import { Component } from 'react';
 import { Image, LogBox, Platform, StatusBar, View } from 'react-native';

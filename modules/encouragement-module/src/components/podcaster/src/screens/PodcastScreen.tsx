@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash/debounce';
 import {
   Episode,
@@ -1242,9 +1242,8 @@ export class PodcastScreen extends React.Component<Props, State> {
                     // eslint-disable-next-line max-len
                     'Limit the number of downloaded epiosdes explanation',
                   )}`}
-                  accessibilityLabel={`${translate('Download limit max')} ${
-                    !!downloadedEpisodeLimit ? downloadedEpisodeLimit : ''
-                  }`}
+                  accessibilityLabel={`${translate('Download limit max')} ${!!downloadedEpisodeLimit ? downloadedEpisodeLimit : ''
+                    }`}
                   handleChangeText={this._handleChangeDownloadLimitText}
                   selectedNumber={downloadedEpisodeLimit}
                   subText={translate(
@@ -1388,7 +1387,7 @@ export class PodcastScreen extends React.Component<Props, State> {
                 renderSectionHeader={(obj) => this._renderSectionHeader(obj, { collapsedSectionsData, globalTheme })}
                 sections={sections}
                 showNoInternetConnectionMessage={showNoInternetConnectionMessage}
-                // stickySectionHeadersEnabled
+              // stickySectionHeadersEnabled
               />
             )}
             {flatListData && podcast && hasSeasons && (

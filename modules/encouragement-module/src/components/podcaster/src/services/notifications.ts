@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import { Alert, Linking, NativeModules } from 'react-native';
 import { requestNotifications, RESULTS } from 'react-native-permissions';
