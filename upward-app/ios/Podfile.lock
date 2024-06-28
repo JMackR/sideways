@@ -1204,9 +1204,9 @@ PODS:
     - React-Core
   - react-native-torch (1.2.0):
     - React
-  - react-native-track-player (4.0.1):
+  - react-native-track-player (4.1.1):
     - React-Core
-    - SwiftAudioEx (= 1.0.0)
+    - SwiftAudioEx (= 1.1.0)
   - react-native-tracking-transparency (0.1.2):
     - React
   - react-native-video (6.2.0):
@@ -1640,7 +1640,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.0)
-  - SwiftAudioEx (1.0.0)
+  - SwiftAudioEx (1.1.0)
   - TOCropViewController (2.7.4)
   - toolbar-android (0.2.1):
     - React
@@ -2104,7 +2104,7 @@ SPEC CHECKSUMS:
   react-native-slider: d303826dbd07814ebba94464ea1e41d59b610116
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-torch: 3f278a42607fb5b69f3e378d740ff0b128c859fd
-  react-native-track-player: 97d76dbbd35f27cc709e5f04540615e54264b3f9
+  react-native-track-player: 82ef1756ffeea61140fea17519ecd6d64ec3cf3e
   react-native-tracking-transparency: 25ff1ff866e338c137c818bdec20526bb05ffcc1
   react-native-video: 59f262a2d87c998b747ca1f031efb6eba1c156b5
   react-native-webview: bd1c6c2661bb51e45469c7badb02ccdcef93671b
@@ -2158,12 +2158,12 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  SwiftAudioEx: 6f511018b7a0fdfd14ed1bb4081f953588245cc0
+  SwiftAudioEx: f6aa653770f3a0d3851edaf8d834a30aee4a7646
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   toolbar-android: 2a73856e98b750d7e71ce4644d3f41cc98211719
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   VisionCamera: 2c4cb89c573c5d54d1191e433bd224998d3b14b7
-  Yoga: dafebc41bc66910af33077aaa41078e89fd635bf
+  Yoga: d02ee88821190d82b2daa5cd15640a82ffafaaab
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
 PODFILE CHECKSUM: 04b32afb1f1f3571d16ef86d345b8dd21dea2d73
